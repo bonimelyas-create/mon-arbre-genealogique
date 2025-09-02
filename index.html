@@ -30,9 +30,9 @@
         }
 
         .app-container {
-            max-width: 98%;
-            width: 98%;
-            height: 95vh;
+            max-width: 95%;
+            width: 95%;
+            height: 90vh;
             overflow: hidden;
             display: none;
         }
@@ -54,28 +54,23 @@
             font-weight: bold;
         }
 
-        input, select, textarea {
+        input {
             width: 100%;
             padding: 0.75rem;
             border: 2px solid #ddd;
             border-radius: 8px;
             font-size: 1rem;
             transition: border-color 0.3s;
-            font-family: inherit;
         }
 
-        textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        input:focus, select:focus, textarea:focus {
+        input:focus {
             outline: none;
             border-color: #667eea;
         }
 
-        .login-btn, .logout-btn, .btn {
-            padding: 0.75rem 1.5rem;
+        .login-btn, .logout-btn {
+            width: 100%;
+            padding: 0.75rem;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
@@ -83,22 +78,362 @@
             font-size: 1rem;
             cursor: pointer;
             transition: transform 0.2s;
-            margin: 0.25rem;
         }
 
-        .login-btn {
-            width: 100%;
+        .logout-btn {
+            width: auto;
+            padding: 0.5rem 1rem;
+            margin-bottom: 1rem;
         }
 
-        .btn-success {
-            background: linear-gradient(135deg, #28a745, #20c997);
+        .login-btn:hover, .logout-btn:hover {
+            transform: translateY(-2px);
         }
 
-        .btn-warning {
-            background: linear-gradient(135deg, #ffc107, #fd7e14);
+        .error {
+            color: #e74c3c;
+            text-align: center;
+            margin-top: 1rem;
         }
 
-        .btn-danger {
-            background: linear-gradient(135deg, #dc3545, #e83e8c);
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #eee;
         }
 
+        .tree-container {
+            height: calc(100% - 80px);
+            overflow: auto;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .tree-node {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 0.5rem;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .tree-node:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .tree-node.collapsed {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .tree-node.expanded {
+            background: linear-gradient(135deg, #56ab2f, #a8e6cf);
+            color: #333;
+        }
+
+        .person-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .person-details h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .person-details p {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .tree-node.collapsed .person-details p {
+            color: #ddd;
+        }
+
+        .toggle-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: inherit;
+            transition: transform 0.3s;
+        }
+
+        .toggle-btn:hover {
+            transform: rotate(90deg);
+        }
+
+        .children {
+            margin-left: 2rem;
+            margin-top: 1rem;
+            border-left: 3px dashed #667eea;
+            padding-left: 1rem;
+            display: none;
+        }
+
+        .children.visible {
+            display: block;
+        }
+
+        .connection-line {
+            position: absolute;
+            left: -1rem;
+            top: 50%;
+            width: 1rem;
+            height: 2px;
+            background: #667eea;
+        }
+
+        .add-person-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0.5rem;
+        }
+
+        .add-person-form {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            display: none;
+        }
+
+        .add-person-form.visible {
+            display: block;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-row input {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Formulaire de connexion -->
+    <div class="login-container" id="loginContainer">
+        <div class="login-form">
+            <h2>🌳 Accès Arbre Généalogique</h2>
+            <div class="form-group">
+                <label for="username">Nom d'utilisateur :</label>
+                <input type="text" id="username" placeholder="Entrez votre nom d'utilisateur">
+            </div>
+            <div class="form-group">
+                <label for="password">Mot de passe :</label>
+                <input type="password" id="password" placeholder="Entrez votre mot de passe">
+            </div>
+            <button class="login-btn" onclick="login()">Se connecter</button>
+            <div class="error" id="errorMessage"></div>
+        </div>
+    </div>
+
+    <!-- Application principale -->
+    <div class="app-container" id="appContainer">
+        <div class="header">
+            <h1>🌳 Arbre Généalogique Familial</h1>
+            <button class="logout-btn" onclick="logout()">Se déconnecter</button>
+        </div>
+        <div class="tree-container" id="treeContainer">
+            <!-- L'arbre sera généré ici -->
+        </div>
+    </div>
+
+    <script>
+        // Utilisateurs autorisés (à adapter selon vos besoins)
+        const authorizedUsers = {
+            'famille': 'arbre2024',
+            'admin': 'genealogie123',
+            'marie': 'famille456',
+            'jean': 'heritage789'
+        };
+
+        // Données de l'arbre généalogique
+        let familyTree = {
+            id: 'root',
+            name: 'Jean Dupont',
+            birth: '1920-03-15',
+            death: '1995-08-20',
+            spouse: 'Marie Martin',
+            notes: 'Patriarche de la famille, agriculteur',
+            expanded: false,
+            children: [
+                {
+                    id: 'child1',
+                    name: 'Pierre Dupont',
+                    birth: '1945-06-10',
+                    death: '',
+                    spouse: 'Anne Leroy',
+                    notes: 'Médecin, père de 3 enfants',
+                    expanded: false,
+                    children: [
+                        {
+                            id: 'grandchild1',
+                            name: 'Sophie Dupont',
+                            birth: '1970-12-05',
+                            death: '',
+                            spouse: 'Michel Bernard',
+                            notes: 'Professeure, 2 enfants',
+                            expanded: false,
+                            children: [
+                                {
+                                    id: 'greatgrand1',
+                                    name: 'Emma Bernard',
+                                    birth: '2000-04-12',
+                                    death: '',
+                                    spouse: '',
+                                    notes: 'Étudiante en médecine',
+                                    expanded: false,
+                                    children: []
+                                }
+                            ]
+                        },
+                        {
+                            id: 'grandchild2',
+                            name: 'Thomas Dupont',
+                            birth: '1973-09-18',
+                            death: '',
+                            spouse: 'Claire Moreau',
+                            notes: 'Ingénieur informatique',
+                            expanded: false,
+                            children: []
+                        }
+                    ]
+                },
+                {
+                    id: 'child2',
+                    name: 'Catherine Dupont',
+                    birth: '1948-02-28',
+                    death: '',
+                    spouse: 'Robert Blanc',
+                    notes: 'Institutrice retraitée',
+                    expanded: false,
+                    children: [
+                        {
+                            id: 'grandchild3',
+                            name: 'Julie Blanc',
+                            birth: '1975-11-03',
+                            death: '',
+                            spouse: 'David Roux',
+                            notes: 'Architecte',
+                            expanded: false,
+                            children: []
+                        }
+                    ]
+                }
+            ]
+        };
+
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+
+            if (authorizedUsers[username] && authorizedUsers[username] === password) {
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('appContainer').style.display = 'block';
+                renderTree();
+                errorMessage.textContent = '';
+            } else {
+                errorMessage.textContent = 'Nom d\'utilisateur ou mot de passe incorrect.';
+                document.getElementById('password').value = '';
+            }
+        }
+
+        function logout() {
+            document.getElementById('loginContainer').style.display = 'block';
+            document.getElementById('appContainer').style.display = 'none';
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        }
+
+        function renderTree() {
+            const container = document.getElementById('treeContainer');
+            container.innerHTML = '';
+            renderNode(familyTree, container);
+        }
+
+        function renderNode(node, container) {
+            const nodeDiv = document.createElement('div');
+            nodeDiv.className = `tree-node ${node.expanded ? 'expanded' : 'collapsed'}`;
+            
+            const hasChildren = node.children && node.children.length > 0;
+            
+            nodeDiv.innerHTML = `
+                <div class="person-info">
+                    <div class="person-details">
+                        <h3>${node.name}</h3>
+                        <p><strong>Naissance:</strong> ${node.birth || 'Non renseigné'}</p>
+                        ${node.death ? `<p><strong>Décès:</strong> ${node.death}</p>` : ''}
+                        ${node.spouse ? `<p><strong>Conjoint(e):</strong> ${node.spouse}</p>` : ''}
+                        ${node.notes ? `<p><strong>Notes:</strong> ${node.notes}</p>` : ''}
+                    </div>
+                    ${hasChildren ? `<button class="toggle-btn" onclick="toggleNode('${node.id}')">${node.expanded ? '−' : '+'}</button>` : ''}
+                </div>
+            `;
+
+            container.appendChild(nodeDiv);
+
+            if (hasChildren) {
+                const childrenDiv = document.createElement('div');
+                childrenDiv.className = `children ${node.expanded ? 'visible' : ''}`;
+                childrenDiv.id = `children-${node.id}`;
+
+                node.children.forEach(child => {
+                    renderNode(child, childrenDiv);
+                });
+
+                container.appendChild(childrenDiv);
+            }
+        }
+
+        function toggleNode(nodeId) {
+            const node = findNodeById(familyTree, nodeId);
+            if (node) {
+                node.expanded = !node.expanded;
+                renderTree();
+            }
+        }
+
+        function findNodeById(tree, id) {
+            if (tree.id === id) return tree;
+            
+            if (tree.children) {
+                for (let child of tree.children) {
+                    const found = findNodeById(child, id);
+                    if (found) return found;
+                }
+            }
+            return null;
+        }
+
+        // Permettre la connexion avec la touche Entrée
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && document.getElementById('loginContainer').style.display !== 'none') {
+                login();
+            }
+        });
+    </script>
+</body>
+</html>
