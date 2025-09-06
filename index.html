@@ -30,9 +30,9 @@
         }
 
         .app-container {
-            max-width: 95%;
-            width: 95%;
-            height: 90vh;
+            max-width: 98%;
+            width: 98%;
+            height: 95vh;
             overflow: hidden;
             display: none;
         }
@@ -54,23 +54,28 @@
             font-weight: bold;
         }
 
-        input {
+        input, select, textarea {
             width: 100%;
             padding: 0.75rem;
             border: 2px solid #ddd;
             border-radius: 8px;
             font-size: 1rem;
             transition: border-color 0.3s;
+            font-family: inherit;
         }
 
-        input:focus {
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        input:focus, select:focus, textarea:focus {
             outline: none;
             border-color: #667eea;
         }
 
-        .login-btn, .logout-btn {
-            width: 100%;
-            padding: 0.75rem;
+        .login-btn, .logout-btn, .btn {
+            padding: 0.75rem 1.5rem;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
@@ -78,20 +83,41 @@
             font-size: 1rem;
             cursor: pointer;
             transition: transform 0.2s;
+            margin: 0.25rem;
         }
 
-        .logout-btn {
-            width: auto;
-            padding: 0.5rem 1rem;
-            margin-bottom: 1rem;
+        .login-btn {
+            width: 100%;
         }
 
-        .login-btn:hover, .logout-btn:hover {
+        .btn-success {
+            background: linear-gradient(135deg, #28a745, #20c997);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #ffc107, #fd7e14);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545, #e83e8c);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d, #adb5bd);
+        }
+
+        .btn:hover, .login-btn:hover, .logout-btn:hover {
             transform: translateY(-2px);
         }
 
         .error {
             color: #e74c3c;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .success {
+            color: #28a745;
             text-align: center;
             margin-top: 1rem;
         }
@@ -105,12 +131,38 @@
             border-bottom: 2px solid #eee;
         }
 
+        .toolbar {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .main-content {
+            height: calc(100% - 140px);
+            display: flex;
+            gap: 1rem;
+        }
+
         .tree-container {
-            height: calc(100% - 80px);
+            flex: 1;
             overflow: auto;
             padding: 1rem;
             background: #f8f9fa;
             border-radius: 10px;
+        }
+
+        .admin-panel {
+            width: 400px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1rem;
+            overflow: auto;
+            display: none;
+        }
+
+        .admin-panel.visible {
+            display: block;
         }
 
         .tree-node {
@@ -130,6 +182,11 @@
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
         }
 
+        .tree-node.selected {
+            border-color: #ffc107;
+            background: #fff3cd;
+        }
+
         .tree-node.collapsed {
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
@@ -143,7 +200,7 @@
         .person-info {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
         }
 
         .person-details h3 {
@@ -161,16 +218,34 @@
             color: #ddd;
         }
 
-        .toggle-btn {
+        .node-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .toggle-btn, .edit-btn, .add-child-btn, .delete-btn {
             background: rgba(255, 255, 255, 0.2);
             border: none;
-            border-radius: 50%;
+            border-radius: 4px;
             width: 30px;
-            height: 30px;
+            height: 25px;
             cursor: pointer;
-            font-size: 1.2rem;
+            font-size: 0.8rem;
             color: inherit;
-            transition: transform 0.3s;
+            transition: all 0.3s;
+        }
+
+        .edit-btn {
+            background: rgba(255, 193, 7, 0.8);
+        }
+
+        .add-child-btn {
+            background: rgba(40, 167, 69, 0.8);
+        }
+
+        .delete-btn {
+            background: rgba(220, 53, 69, 0.8);
         }
 
         .toggle-btn:hover {
@@ -189,35 +264,19 @@
             display: block;
         }
 
-        .connection-line {
-            position: absolute;
-            left: -1rem;
-            top: 50%;
-            width: 1rem;
-            height: 2px;
-            background: #667eea;
+        .form-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            border: 2px solid #ddd;
         }
 
-        .add-person-btn {
-            background: #28a745;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-            cursor: pointer;
-            margin: 0.5rem;
-        }
-
-        .add-person-form {
-            background: #f8f9fa;
-            padding: 1rem;
-            border-radius: 8px;
-            margin: 1rem 0;
-            display: none;
-        }
-
-        .add-person-form.visible {
-            display: block;
+        .form-section h3 {
+            color: #333;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #eee;
         }
 
         .form-row {
@@ -226,8 +285,58 @@
             margin-bottom: 1rem;
         }
 
-        .form-row input {
+        .form-row > * {
             flex: 1;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal.visible {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow: auto;
+        }
+
+        .json-export {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-family: monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow: auto;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .admin-panel {
+                width: 100%;
+                height: 300px;
+            }
         }
     </style>
 </head>
@@ -253,15 +362,120 @@
     <div class="app-container" id="appContainer">
         <div class="header">
             <h1>🌳 Arbre Généalogique Familial</h1>
-            <button class="logout-btn" onclick="logout()">Se déconnecter</button>
+            <div>
+                <span id="currentUser" style="margin-right: 1rem; color: #666;"></span>
+                <button class="logout-btn" onclick="logout()">Se déconnecter</button>
+            </div>
         </div>
-        <div class="tree-container" id="treeContainer">
-            <!-- L'arbre sera généré ici -->
+
+        <div class="toolbar">
+            <button class="btn btn-success" onclick="toggleAdminPanel()">
+                <span id="adminToggleText">🛠 Ouvrir Admin</span>
+            </button>
+            <button class="btn btn-secondary" onclick="expandAll()">📂 Tout Déplier</button>
+            <button class="btn btn-secondary" onclick="collapseAll()">📁 Tout Replier</button>
+            <button class="btn btn-warning" onclick="showExportModal()">📤 Exporter</button>
+            <button class="btn btn-warning" onclick="showImportModal()">📥 Importer</button>
+        </div>
+
+        <div class="main-content">
+            <div class="tree-container" id="treeContainer">
+                <!-- L'arbre sera généré ici -->
+            </div>
+
+            <div class="admin-panel" id="adminPanel">
+                <div class="form-section">
+                    <h3 id="formTitle">➕ Ajouter une nouvelle personne</h3>
+                    <form id="personForm">
+                        <input type="hidden" id="editingId" value="">
+                        <input type="hidden" id="parentId" value="">
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="personName">Nom complet *</label>
+                                <input type="text" id="personName" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="birthDate">Date de naissance</label>
+                                <input type="date" id="birthDate">
+                            </div>
+                            <div class="form-group">
+                                <label for="deathDate">Date de décès</label>
+                                <input type="date" id="deathDate">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="spouse">Conjoint(e)s</label>
+                                <textarea id="spouse" rows="3" placeholder="Ex: Marie Dupont (1920-1985)&#10;Anne Martin (1925-1990)&#10;Claire Leroy (1930-)"></textarea>
+                                <small style="color: #666; font-size: 0.8rem;">Séparez plusieurs conjoints par des retours à la ligne. Vous pouvez inclure les dates entre parenthèses.</small>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="notes">Notes</label>
+                            <textarea id="notes" placeholder="Profession, informations complémentaires..."></textarea>
+                        </div>
+
+                        <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+                            <button type="button" class="btn btn-secondary" onclick="cancelEdit()">Annuler</button>
+                            <button type="submit" class="btn btn-success">
+                                <span id="submitButtonText">Ajouter</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="form-section">
+                    <h3>📋 Instructions</h3>
+                    <p style="font-size: 0.9rem; color: #666; line-height: 1.4;">
+                        • <strong>Ajouter :</strong> Cliquez sur le bouton vert "+" sur une personne<br>
+                        • <strong>Modifier :</strong> Cliquez sur le bouton jaune "✏" sur une personne<br>
+                        • <strong>Supprimer :</strong> Cliquez sur le bouton rouge "🗑" (attention : irréversible)<br>
+                        • <strong>Polygamie :</strong> Séparez les conjoints par des retours à la ligne<br>
+                        • <strong>Dates conjoints :</strong> Format recommandé : "Prénom Nom (année-année)"<br>
+                        • <strong>Navigation :</strong> Cliquez sur les boutons +/- pour déplier/replier
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modales -->
+    <div class="modal" id="exportModal">
+        <div class="modal-content">
+            <h3>📤 Exporter les données</h3>
+            <p>Copiez ces données pour sauvegarder votre arbre :</p>
+            <div class="json-export" id="exportData"></div>
+            <div style="margin-top: 1rem; text-align: right;">
+                <button class="btn btn-secondary" onclick="closeModal('exportModal')">Fermer</button>
+                <button class="btn btn-success" onclick="copyExportData()">Copier</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="importModal">
+        <div class="modal-content">
+            <h3>📥 Importer des données</h3>
+            <p>Collez vos données JSON d'arbre généalogique :</p>
+            <div class="form-group">
+                <textarea id="importData" rows="10" placeholder="Collez ici les données JSON..."></textarea>
+            </div>
+            <div style="margin-top: 1rem; text-align: right;">
+                <button class="btn btn-secondary" onclick="closeModal('importModal')">Annuler</button>
+                <button class="btn btn-success" onclick="importData()">Importer</button>
+            </div>
+            <div class="error" id="importError"></div>
+            <div class="success" id="importSuccess"></div>
         </div>
     </div>
 
     <script>
-        // Utilisateurs autorisés (à adapter selon vos besoins)
+        // Utilisateurs autorisés
         const authorizedUsers = {
             'famille': 'arbre2024',
             'admin': 'genealogie123',
@@ -269,14 +483,18 @@
             'jean': 'heritage789'
         };
 
-        // Données de l'arbre généalogique
+        let currentUser = '';
+        let selectedNodeId = null;
+        let nextId = 100; // Pour générer des IDs uniques
+
+        // Données de l'arbre généalogique avec exemple de polygamie
         let familyTree = {
             id: 'root',
             name: 'Jean Dupont',
             birth: '1920-03-15',
             death: '1995-08-20',
-            spouse: 'Marie Martin',
-            notes: 'Patriarche de la famille, agriculteur',
+            spouse: 'Marie Martin (1925-1980)\nAnne Leroy (1930-1988)',
+            notes: 'Patriarche de la famille, agriculteur. Marié deux fois suite au décès de sa première épouse.',
             expanded: false,
             children: [
                 {
@@ -284,8 +502,8 @@
                     name: 'Pierre Dupont',
                     birth: '1945-06-10',
                     death: '',
-                    spouse: 'Anne Leroy',
-                    notes: 'Médecin, père de 3 enfants',
+                    spouse: 'Sylvie Bernard (1948-)\nClaire Moreau (1952-)',
+                    notes: 'Médecin, père de 5 enfants de ses deux mariages',
                     expanded: false,
                     children: [
                         {
@@ -294,7 +512,7 @@
                             birth: '1970-12-05',
                             death: '',
                             spouse: 'Michel Bernard',
-                            notes: 'Professeure, 2 enfants',
+                            notes: 'Professeure, fille de Pierre et Sylvie',
                             expanded: false,
                             children: [
                                 {
@@ -314,8 +532,18 @@
                             name: 'Thomas Dupont',
                             birth: '1973-09-18',
                             death: '',
-                            spouse: 'Claire Moreau',
-                            notes: 'Ingénieur informatique',
+                            spouse: 'Isabelle Petit',
+                            notes: 'Ingénieur informatique, fils de Pierre et Sylvie',
+                            expanded: false,
+                            children: []
+                        },
+                        {
+                            id: 'grandchild4',
+                            name: 'Marc Dupont',
+                            birth: '1980-03-22',
+                            death: '',
+                            spouse: '',
+                            notes: 'Avocat, fils de Pierre et Claire',
                             expanded: false,
                             children: []
                         }
@@ -327,7 +555,7 @@
                     birth: '1948-02-28',
                     death: '',
                     spouse: 'Robert Blanc',
-                    notes: 'Institutrice retraitée',
+                    notes: 'Institutrice retraitée, fille de Jean et Marie',
                     expanded: false,
                     children: [
                         {
@@ -341,6 +569,16 @@
                             children: []
                         }
                     ]
+                },
+                {
+                    id: 'child3',
+                    name: 'Michel Dupont',
+                    birth: '1952-07-14',
+                    death: '',
+                    spouse: 'Françoise Durand',
+                    notes: 'Comptable, fils de Jean et Anne',
+                    expanded: false,
+                    children: []
                 }
             ]
         };
@@ -351,6 +589,8 @@
             const errorMessage = document.getElementById('errorMessage');
 
             if (authorizedUsers[username] && authorizedUsers[username] === password) {
+                currentUser = username;
+                document.getElementById('currentUser').textContent = Connecté : ${username};
                 document.getElementById('loginContainer').style.display = 'none';
                 document.getElementById('appContainer').style.display = 'block';
                 renderTree();
@@ -362,10 +602,13 @@
         }
 
         function logout() {
+            currentUser = '';
+            selectedNodeId = null;
             document.getElementById('loginContainer').style.display = 'block';
             document.getElementById('appContainer').style.display = 'none';
             document.getElementById('username').value = '';
             document.getElementById('password').value = '';
+            document.getElementById('adminPanel').classList.remove('visible');
         }
 
         function renderTree() {
@@ -376,20 +619,42 @@
 
         function renderNode(node, container) {
             const nodeDiv = document.createElement('div');
-            nodeDiv.className = `tree-node ${node.expanded ? 'expanded' : 'collapsed'}`;
+            nodeDiv.className = tree-node ${node.expanded ? 'expanded' : 'collapsed'};
+            if (node.id === selectedNodeId) {
+                nodeDiv.classList.add('selected');
+            }
             
             const hasChildren = node.children && node.children.length > 0;
+            
+            // Formatage des conjoints
+            let spouseHtml = '';
+            if (node.spouse) {
+                const spouses = node.spouse.split('\n').filter(s => s.trim());
+                if (spouses.length === 1) {
+                    spouseHtml = <p><strong>Conjoint(e):</strong> ${spouses[0]}</p>;
+                } else if (spouses.length > 1) {
+                    spouseHtml = <p><strong>Conjoints:</strong></p>;
+                    spouses.forEach((spouse, index) => {
+                        spouseHtml += <p style="margin-left: 1rem; font-size: 0.85rem;">• ${spouse.trim()}</p>;
+                    });
+                }
+            }
             
             nodeDiv.innerHTML = `
                 <div class="person-info">
                     <div class="person-details">
                         <h3>${node.name}</h3>
                         <p><strong>Naissance:</strong> ${node.birth || 'Non renseigné'}</p>
-                        ${node.death ? `<p><strong>Décès:</strong> ${node.death}</p>` : ''}
-                        ${node.spouse ? `<p><strong>Conjoint(e):</strong> ${node.spouse}</p>` : ''}
-                        ${node.notes ? `<p><strong>Notes:</strong> ${node.notes}</p>` : ''}
+                        ${node.death ? <p><strong>Décès:</strong> ${node.death}</p> : ''}
+                        ${spouseHtml}
+                        ${node.notes ? <p><strong>Notes:</strong> ${node.notes}</p> : ''}
                     </div>
-                    ${hasChildren ? `<button class="toggle-btn" onclick="toggleNode('${node.id}')">${node.expanded ? '−' : '+'}</button>` : ''}
+                    <div class="node-actions">
+                        ${hasChildren ? <button class="toggle-btn" onclick="toggleNode('${node.id}')" title="Déplier/Replier">${node.expanded ? '−' : '+'}</button> : ''}
+                        <button class="add-child-btn" onclick="startAddChild('${node.id}')" title="Ajouter un enfant">+</button>
+                        <button class="edit-btn" onclick="startEditNode('${node.id}')" title="Modifier">✏</button>
+                        ${node.id !== 'root' ? <button class="delete-btn" onclick="deleteNode('${node.id}')" title="Supprimer">🗑</button> : ''}
+                    </div>
                 </div>
             `;
 
@@ -397,8 +662,8 @@
 
             if (hasChildren) {
                 const childrenDiv = document.createElement('div');
-                childrenDiv.className = `children ${node.expanded ? 'visible' : ''}`;
-                childrenDiv.id = `children-${node.id}`;
+                childrenDiv.className = children ${node.expanded ? 'visible' : ''};
+                childrenDiv.id = children-${node.id};
 
                 node.children.forEach(child => {
                     renderNode(child, childrenDiv);
@@ -428,10 +693,234 @@
             return null;
         }
 
+        function generateId() {
+            return 'person_' + (nextId++);
+        }
+
+        function toggleAdminPanel() {
+            const panel = document.getElementById('adminPanel');
+            const toggleText = document.getElementById('adminToggleText');
+            
+            if (panel.classList.contains('visible')) {
+                panel.classList.remove('visible');
+                toggleText.textContent = '🛠 Ouvrir Admin';
+                cancelEdit();
+            } else {
+                panel.classList.add('visible');
+                toggleText.textContent = '❌ Fermer Admin';
+            }
+        }
+
+        function startAddChild(parentId) {
+            selectedNodeId = parentId;
+            document.getElementById('formTitle').textContent = '➕ Ajouter un enfant';
+            document.getElementById('submitButtonText').textContent = 'Ajouter';
+            document.getElementById('parentId').value = parentId;
+            document.getElementById('editingId').value = '';
+            
+            // Réinitialiser le formulaire
+            document.getElementById('personForm').reset();
+            document.getElementById('parentId').value = parentId;
+            
+            // Ouvrir le panneau admin
+            document.getElementById('adminPanel').classList.add('visible');
+            document.getElementById('adminToggleText').textContent = '❌ Fermer Admin';
+            
+            renderTree();
+        }
+
+        function startEditNode(nodeId) {
+            const node = findNodeById(familyTree, nodeId);
+            if (!node) return;
+
+            selectedNodeId = nodeId;
+            document.getElementById('formTitle').textContent = '✏ Modifier une personne';
+            document.getElementById('submitButtonText').textContent = 'Modifier';
+            document.getElementById('editingId').value = nodeId;
+            document.getElementById('parentId').value = '';
+
+            // Remplir le formulaire
+            document.getElementById('personName').value = node.name || '';
+            document.getElementById('birthDate').value = node.birth || '';
+            document.getElementById('deathDate').value = node.death || '';
+            document.getElementById('spouse').value = node.spouse || '';
+            document.getElementById('notes').value = node.notes || '';
+
+            // Ouvrir le panneau admin
+            document.getElementById('adminPanel').classList.add('visible');
+            document.getElementById('adminToggleText').textContent = '❌ Fermer Admin';
+            
+            renderTree();
+        }
+
+        function cancelEdit() {
+            selectedNodeId = null;
+            document.getElementById('formTitle').textContent = '➕ Ajouter une nouvelle personne';
+            document.getElementById('submitButtonText').textContent = 'Ajouter';
+            document.getElementById('personForm').reset();
+            renderTree();
+        }
+
+        function deleteNode(nodeId) {
+            if (nodeId === 'root') {
+                alert('Impossible de supprimer la racine de l\'arbre.');
+                return;
+            }
+
+            if (confirm('Êtes-vous sûr de vouloir supprimer cette personne et tous ses descendants ?')) {
+                deleteNodeFromTree(familyTree, nodeId);
+                renderTree();
+                cancelEdit();
+            }
+        }
+
+        function deleteNodeFromTree(tree, nodeId) {
+            if (tree.children) {
+                tree.children = tree.children.filter(child => {
+                    if (child.id === nodeId) return false;
+                    deleteNodeFromTree(child, nodeId);
+                    return true;
+                });
+            }
+        }
+
+        function expandAll() {
+            expandCollapseAll(familyTree, true);
+            renderTree();
+        }
+
+        function collapseAll() {
+            expandCollapseAll(familyTree, false);
+            renderTree();
+        }
+
+        function expandCollapseAll(node, expand) {
+            node.expanded = expand;
+            if (node.children) {
+                node.children.forEach(child => expandCollapseAll(child, expand));
+            }
+        }
+
+        function showExportModal() {
+            document.getElementById('exportData').textContent = JSON.stringify(familyTree, null, 2);
+            document.getElementById('exportModal').classList.add('visible');
+        }
+
+        function showImportModal() {
+            document.getElementById('importData').value = '';
+            document.getElementById('importError').textContent = '';
+            document.getElementById('importSuccess').textContent = '';
+            document.getElementById('importModal').classList.add('visible');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('visible');
+        }
+
+        function copyExportData() {
+            const data = document.getElementById('exportData').textContent;
+            navigator.clipboard.writeText(data).then(() => {
+                alert('Données copiées dans le presse-papier !');
+            });
+        }
+
+        function importData() {
+            const data = document.getElementById('importData').value.trim();
+            const errorDiv = document.getElementById('importError');
+            const successDiv = document.getElementById('importSuccess');
+            
+            errorDiv.textContent = '';
+            successDiv.textContent = '';
+
+            if (!data) {
+                errorDiv.textContent = 'Veuillez saisir des données JSON.';
+                return;
+            }
+
+            try {
+                const newTree = JSON.parse(data);
+                
+                // Validation basique
+                if (!newTree.id || !newTree.name) {
+                    throw new Error('Format invalide : id et name requis.');
+                }
+
+                familyTree = newTree;
+                renderTree();
+                successDiv.textContent = 'Données importées avec succès !';
+                
+                setTimeout(() => {
+                    closeModal('importModal');
+                }, 2000);
+                
+            } catch (error) {
+                errorDiv.textContent = 'Erreur : ' + error.message;
+            }
+        }
+
+        // Gestionnaire de formulaire
+        document.getElementById('personForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const editingId = document.getElementById('editingId').value;
+            const parentId = document.getElementById('parentId').value;
+            const name = document.getElementById('personName').value.trim();
+            
+            if (!name) {
+                alert('Le nom est obligatoire.');
+                return;
+            }
+
+            const personData = {
+                id: editingId || generateId(),
+                name: name,
+                birth: document.getElementById('birthDate').value,
+                death: document.getElementById('deathDate').value,
+                spouse: document.getElementById('spouse').value.trim(),
+                notes: document.getElementById('notes').value.trim(),
+                expanded: false,
+                children: []
+            };
+
+            if (editingId) {
+                // Modification
+                const node = findNodeById(familyTree, editingId);
+                if (node) {
+                    node.name = personData.name;
+                    node.birth = personData.birth;
+                    node.death = personData.death;
+                    node.spouse = personData.spouse;
+                    node.notes = personData.notes;
+                }
+            } else if (parentId) {
+                // Ajout d'enfant
+                const parent = findNodeById(familyTree, parentId);
+                if (parent) {
+                    if (!parent.children) parent.children = [];
+                    parent.children.push(personData);
+                }
+            } else {
+                // Ajout à la racine (remplace la racine - cas spécial)
+                if (confirm('Remplacer la racine de l\'arbre ?')) {
+                    familyTree = personData;
+                }
+            }
+
+            renderTree();
+            cancelEdit();
+        });
+
         // Permettre la connexion avec la touche Entrée
         document.addEventListener('keypress', function(e) {
             if (e.key === 'Enter' && document.getElementById('loginContainer').style.display !== 'none') {
                 login();
+            }
+        });
+
+        // Fermer les modales en cliquant à l'extérieur
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal')) {
+                e.target.classList.remove('visible');
             }
         });
     </script>
